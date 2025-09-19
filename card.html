@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thrustworks Dynetics — Digital ID</title>
+<link rel="icon" href="logo.png">
+<style>
+  :root{
+    --accent: #ffd166; /* accent colour for labels — tweak as you like */
+    --card-w: 360px;
+    --glass-bg: rgba(255,255,255,0.08);
+  }
+  html,body{height:100%;margin:0;font-family:Inter,Segoe UI,system-ui,Roboto,'Helvetica Neue',Arial;}
+  /* background image (your site screenshot) */
+  body{
+    min-height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: #002b4f;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image: url('bg.jpg');
+    background-size:cover;
+    background-position:center;
+    filter: blur(6px) brightness(0.6) saturate(1.05);
+    transform: scale(1.03);
+    z-index:-2;
+  }
+  /* dark overlay for consistent contrast */
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.45));
+    z-index:-1;
+  }
+
+  .wrap{width:100%;max-width:980px;padding:20px;display:flex;justify-content:center;}
+  .card{
+    width:var(--card-w);
+    border-radius:14px;
+    padding:22px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    backdrop-filter: blur(8px) saturate(120%);
+    color: #fff;
+    text-align:center;
+  }
+
+  .logo{width:92px;height:auto;margin:0 auto 8px;display:block;filter:brightness(1.2);}
+  h1.company{margin:4px 0 14px;font-size:1.05rem;letter-spacing:0.6px;}
+  .name{font-size:1.15rem;font-weight:700;margin:6px 0;}
+  .line{margin:8px 0;font-size:0.95rem;}
+  .label{display:block;font-size:0.75rem;color:var(--accent);font-weight:700;margin-bottom:4px;}
+  .small{font-size:0.9rem;opacity:0.95}
+  .meta{margin-top:12px;text-align:left;background:rgba(255,255,255,0.03);padding:10px;border-radius:8px}
+  .meta .row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.92rem}
+  .foot{margin-top:14px;font-size:0.8rem;color:rgba(255,255,255,0.8)}
+  .qr{width:84px;height:84px;margin:12px auto 0;border-radius:8px;background:#fff;padding:6px}
+  /* responsive */
+  @media (max-width:420px){ .card{width:90%;padding:16px} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Digital ID Card">
+      <img src="logo.png" alt="Company logo" class="logo">
+      <div class="company">Thrustworks Dynetics</div>
+
+      <div class="name" id="name">Employee Name</div>
+      <div class="line small"><span class="label">Designation</span><span id="designation">Designation</span></div>
+
+      <div class="meta">
+        <div class="row"><div><strong>DOJ</strong></div><div id="doj">01-Jan-2020</div></div>
+        <div class="row"><div><strong>ID</strong></div><div id="eid">EMP001</div></div>
+        <div class="row"><div><strong>Mobile</strong></div><div id="phone">+91-XXXXXXXXXX</div></div>
+        <div class="row"><div><strong>Email</strong></div><div id="email">user@example.com</div></div>
+      </div>
+
+      <div class="foot">This is an official Thrustworks Dynetics digital ID.</div>
+
+      <!-- small QR preview (links to same page URL) -->
+      <div id="qr-container" style="text-align:center;">
+        <img id="qr" class="qr" src="" alt="QR code linking to this card">
+      </div>
+    </div>
+  </div>
+
+<script>
+  // parse query parameters and populate fields
+  const params = new URLSearchParams(location.search);
+
+  function setText(id, param, fallback){
+    const el = document.getElementById(id);
+    const v = params.get(param);
+    if(v && v.trim() !== ''){
+      el.textContent = decodeURIComponent(v);
+    } else {
+      el.textContent = fallback;
+    }
+  }
+
+  setText('name','name','Employee Name');
+  setText('designation','designation','Designation');
+  setText('doj','doj','01-Jan-2020');
+  setText('eid','id','EMP001');
+  setText('phone','phone','+91-XXXXXXXXXX');
+  setText('email','email','user@example.com');
+
+  // generate small QR (QuickChart API) that points back to this same URL
+  const currentUrl = location.href;
+  const encodeUrl = encodeURIComponent(currentUrl);
+  // QuickChart QR endpoint (free, reliable). More at quickchart.io docs.
+  const qrApi = `https://quickchart.io/chart?cht=qr&chs=220x220&chl=${encodeUrl}&choe=UTF-8&chld=L|1`;
+  document.getElementById('qr').src = qrApi;
+</script>
+</body>
+</html>
