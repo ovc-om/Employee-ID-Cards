@@ -7,7 +7,7 @@
 <link rel="icon" href="logo.png">
 <style>
   :root{
-    --accent: #ffd166; 
+    --accent: #ffd166; /* accent colour for labels */
     --card-w: 360px;
     --glass-bg: rgba(255,255,255,0.08);
   }
@@ -53,13 +53,6 @@
 
   .logo{width:92px;height:auto;margin:0 auto 8px;display:block;filter:brightness(1.2);}
   .company{margin:4px 0 14px;font-size:1.05rem;letter-spacing:0.6px;}
-  .company-link{
-    color:#ffd166;
-    text-decoration:none;
-    font-weight:bold;
-    display:inline-block;
-    margin-top:6px;
-  }
   .name{font-size:1.15rem;font-weight:700;margin:6px 0;}
   .line{margin:8px 0;font-size:0.95rem;}
   .label{display:block;font-size:0.75rem;color:var(--accent);font-weight:700;margin-bottom:4px;}
@@ -68,6 +61,7 @@
   .meta .row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.92rem}
   .foot{margin-top:14px;font-size:0.8rem;color:rgba(255,255,255,0.8)}
   .qr{width:84px;height:84px;margin:12px auto 0;border-radius:8px;background:#fff;padding:6px}
+  .company-link{margin-top:10px; display:block; text-decoration:none; color:#ffd166; font-weight:700;}
   @media (max-width:420px){ .card{width:90%;padding:16px} }
 </style>
 </head>
@@ -80,22 +74,19 @@
       <div class="name" id="name">Employee Name</div>
       <div class="line small">
         <span class="label">Designation</span>
-        <span id="designation">Designation</span>
+        <span id="designation" style="color:var(--accent); font-weight:700;">Designation</span>
       </div>
 
       <div class="meta">
+        <div class="row"><div><strong>ID</strong></div><div id="eid">EMP001</div></div>
         <div class="row"><div><strong>Emergency</strong></div><div id="emergency">+91-XXXXXXXXXX</div></div>
-        <div class="row"><div><strong>Blood Group</strong></div><div id="blood">O +ve</div></div>
+        <div class="row"><div><strong>Blood Group</strong></div><div id="blood">X</div></div>
       </div>
 
-      <!-- New clickable company link -->
-      <a class="company-link" href="https://www.thrustworksdynetics.in/" target="_blank">
-        Go to Company Website
-      </a>
+      <a href="https://www.thrustworksdynetics.in/" target="_blank" class="company-link">Click here to go to company website</a>
 
       <div class="foot">This is an official Thrustworks Dynetics digital ID.</div>
 
-      <!-- QR can remain decorative or point to card itself -->
       <div id="qr-container" style="text-align:center;">
         <img id="qr" class="qr" src="" alt="QR code linking to this card">
       </div>
@@ -108,15 +99,16 @@
   function setText(id, param, fallback){
     const el = document.getElementById(id);
     const v = params.get(param);
-    el.textContent = (v && v.trim() !== '') ? decodeURIComponent(v) : fallback;
+    el.textContent = v && v.trim() !== '' ? decodeURIComponent(v) : fallback;
   }
 
   setText('name','name','Employee Name');
   setText('designation','designation','Designation');
+  setText('eid','id','EMP001');
   setText('emergency','emergency','+91-XXXXXXXXXX');
-  setText('blood','blood','O +ve');
+  setText('blood','blood','X');
 
-  // QR can just point to this card itself
+  // Generate small QR pointing back to same card URL
   const currentUrl = location.href;
   const encodeUrl = encodeURIComponent(currentUrl);
   const qrApi = `https://quickchart.io/chart?cht=qr&chs=220x220&chl=${encodeUrl}&choe=UTF-8&chld=L|1`;
